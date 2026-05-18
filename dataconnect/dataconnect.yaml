@@ -1,0 +1,14 @@
+specVersion: "v1beta"
+serviceId: "gestao-demandas"
+location: us-central1
+
+schema:
+  source: "./schema"
+  datasource:
+    postgresql:
+      database: gestao_demandas
+      cloudSql:
+        instanceId: gestao-demandas   # nome da instância Cloud SQL que você criar
+
+connectorDirs:
+  - "./connector"

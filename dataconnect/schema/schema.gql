@@ -1,0 +1,124 @@
+# =============================================================
+# Firebase Data Connect — Schema GraphQL
+# Mapeia diretamente para as tabelas Cloud SQL (PostgreSQL)
+# =============================================================
+
+# ─── Tipos embutidos (armazenados como JSONB) ─────────────────
+
+type Subtask {
+  id: String!
+  titulo: String!
+  concluida: Boolean!
+}
+
+type PautaItem {
+  ordem: Int!
+  titulo: String!
+  tempoMin: Int!
+}
+
+type Decisao {
+  texto: String!
+  data: String!
+}
+
+type Encaminhamento {
+  texto: String!
+  responsavel: String!
+  prazo: String
+  tarefaGeradaId: String
+}
+
+type ProjectSnapshot {
+  projetoId: String!
+  nome: String!
+  status: String!
+  corSemaforo: String!
+  tarefasConcluidas: Int!
+  tarefasAbertas: Int!
+  observacao: String!
+  valorNegocio: String!
+  okrs: [String!]!
+}
+
+# ─── Tecnologia ───────────────────────────────────────────────
+
+type Technology @table(name: "technologies") {
+  id: UUID! @default(expr: "uuidV4()")
+  nome: String!
+  descricao: String! @default(value: "")
+  cor: String! @default(value: "#2E75B6")
+  icone: String! @default(value: "cpu")
+  criadoEm: Timestamp! @col(name: "criado_em") @default(expr: "request.time")
+}
+
+# ─── Reunião (declarada antes de Project por FK circular) ─────
+
+type Meeting @table(name: "meetings") {
+  id: UUID! @default(expr: "uuidV4()")
+  titulo: String!
+  dataHora: Timestamp! @col(name: "data_hora")
+  duracaoMin: Int! @col(name: "duracao_min") @default(value: 60)
+  tipo: String! @default(value: "interna")
+  projetoIds: [String!]! @col(name: "projeto_ids", dataType: "uuid[]") @default(value: "[]")
+  participantes: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  pauta: [PautaItem!]! @col(dataType: "jsonb") @default(value: "[]")
+  decisoes: [Decisao!]! @col(dataType: "jsonb") @default(value: "[]")
+  encaminhamentos: [Encaminhamento!]! @col(dataType: "jsonb") @default(value: "[]")
+  notasGerais: String! @col(name: "notas_gerais") @default(value: "")
+  criadoEm: Timestamp! @col(name: "criado_em") @default(expr: "request.time")
+}
+
+# ─── Projeto ──────────────────────────────────────────────────
+
+type Project @table(name: "projects") {
+  id: UUID! @default(expr: "uuidV4()")
+  nome: String!
+  descricao: String! @default(value: "")
+  status: String! @default(value: "planejamento")
+  technology: Technology @col(name: "tecnologia_id")
+  reuniaoOrigem: Meeting @col(name: "reuniao_origem_id")
+  tecnologias: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  parceiro: String! @default(value: "")
+  cor: String! @default(value: "#2E75B6")
+  dataInicio: Date @col(name: "data_inicio")
+  dataPrevisao: Date @col(name: "data_previsao")
+  contexto: String! @default(value: "")
+  valorNegocio: String! @col(name: "valor_negocio") @default(value: "")
+  okrs: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  criadoEm: Timestamp! @col(name: "criado_em") @default(expr: "request.time")
+  atualizadoEm: Timestamp! @col(name: "atualizado_em") @default(expr: "request.time")
+}
+
+# ─── Tarefa ───────────────────────────────────────────────────
+
+type Task @table(name: "tasks") {
+  id: UUID! @default(expr: "uuidV4()")
+  titulo: String!
+  project: Project! @col(name: "projeto_id")
+  prioridade: String! @default(value: "media")
+  status: String! @default(value: "a_fazer")
+  prazo: Date
+  notas: String! @default(value: "")
+  subtarefas: [Subtask!]! @col(dataType: "jsonb") @default(value: "[]")
+  meeting: Meeting @col(name: "reuniao_id")
+  valorNegocio: String! @col(name: "valor_negocio") @default(value: "")
+  okrs: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  criadoEm: Timestamp! @col(name: "criado_em") @default(expr: "request.time")
+  concluidoEm: Timestamp @col(name: "concluido_em")
+}
+
+# ─── Relatório ────────────────────────────────────────────────
+
+type Report @table(name: "reports") {
+  id: UUID! @default(expr: "uuidV4()")
+  periodoRef: String! @col(name: "periodo_ref")
+  dataInicio: Date! @col(name: "data_inicio")
+  dataFim: Date! @col(name: "data_fim")
+  projetosSnapshot: [ProjectSnapshot!]! @col(name: "projetos_snapshot", dataType: "jsonb") @default(value: "[]")
+  destaques: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  riscos: [String!]! @col(dataType: "text[]") @default(value: "[]")
+  proximosPassos: [String!]! @col(name: "proximos_passos", dataType: "text[]") @default(value: "[]")
+  geradoEm: Timestamp! @col(name: "gerado_em") @default(expr: "request.time")
+  exportadoEm: Timestamp @col(name: "exportado_em")
+}

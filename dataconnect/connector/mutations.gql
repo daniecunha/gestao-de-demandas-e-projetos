@@ -1,0 +1,269 @@
+# =============================================================
+# Mutations — Firebase Data Connect
+# =============================================================
+
+# ─── Tecnologias ─────────────────────────────────────────────
+
+mutation CreateTechnology($nome: String!, $descricao: String!, $cor: String!, $icone: String!) {
+  technology_insert(data: { nome: $nome, descricao: $descricao, cor: $cor, icone: $icone }) {
+    id
+  }
+}
+
+mutation UpdateTechnology($id: UUID!, $nome: String, $descricao: String, $cor: String, $icone: String) {
+  technology_update(id: $id, data: { nome: $nome, descricao: $descricao, cor: $cor, icone: $icone }) {
+    id nome descricao cor icone criadoEm
+  }
+}
+
+mutation DeleteTechnology($id: UUID!) {
+  technology_delete(id: $id) { id }
+}
+
+# ─── Projetos ─────────────────────────────────────────────────
+
+mutation CreateProject(
+  $nome: String!
+  $descricao: String!
+  $status: String!
+  $tecnologiaId: UUID
+  $reuniaoOrigemId: UUID
+  $tecnologias: [String!]!
+  $parceiro: String!
+  $cor: String!
+  $dataInicio: Date
+  $dataPrevisao: Date
+  $contexto: String!
+  $valorNegocio: String!
+  $okrs: [String!]!
+) {
+  project_insert(data: {
+    nome: $nome
+    descricao: $descricao
+    status: $status
+    technologyId: $tecnologiaId
+    reuniaoOrigemId: $reuniaoOrigemId
+    tecnologias: $tecnologias
+    parceiro: $parceiro
+    cor: $cor
+    dataInicio: $dataInicio
+    dataPrevisao: $dataPrevisao
+    contexto: $contexto
+    valorNegocio: $valorNegocio
+    okrs: $okrs
+  }) {
+    id
+  }
+}
+
+mutation UpdateProject(
+  $id: UUID!
+  $nome: String
+  $descricao: String
+  $status: String
+  $tecnologiaId: UUID
+  $reuniaoOrigemId: UUID
+  $tecnologias: [String!]
+  $parceiro: String
+  $cor: String
+  $dataInicio: Date
+  $dataPrevisao: Date
+  $contexto: String
+  $valorNegocio: String
+  $okrs: [String!]
+) {
+  project_update(id: $id, data: {
+    nome: $nome
+    descricao: $descricao
+    status: $status
+    technologyId: $tecnologiaId
+    reuniaoOrigemId: $reuniaoOrigemId
+    tecnologias: $tecnologias
+    parceiro: $parceiro
+    cor: $cor
+    dataInicio: $dataInicio
+    dataPrevisao: $dataPrevisao
+    contexto: $contexto
+    valorNegocio: $valorNegocio
+    okrs: $okrs
+  }) {
+    id nome status atualizadoEm
+  }
+}
+
+mutation DeleteProject($id: UUID!) {
+  project_delete(id: $id) { id }
+}
+
+# ─── Tarefas ──────────────────────────────────────────────────
+
+mutation CreateTask(
+  $titulo: String!
+  $projetoId: UUID!
+  $prioridade: String!
+  $status: String!
+  $prazo: Date
+  $notas: String!
+  $subtarefas: Any
+  $reuniaoId: UUID
+  $valorNegocio: String!
+  $okrs: [String!]!
+) {
+  task_insert(data: {
+    titulo: $titulo
+    projectId: $projetoId
+    prioridade: $prioridade
+    status: $status
+    prazo: $prazo
+    notas: $notas
+    subtarefas: $subtarefas
+    meetingId: $reuniaoId
+    valorNegocio: $valorNegocio
+    okrs: $okrs
+  }) {
+    id
+  }
+}
+
+mutation UpdateTask(
+  $id: UUID!
+  $titulo: String
+  $prioridade: String
+  $status: String
+  $prazo: Date
+  $notas: String
+  $subtarefas: Any
+  $reuniaoId: UUID
+  $concluidoEm: Timestamp
+  $valorNegocio: String
+  $okrs: [String!]
+) {
+  task_update(id: $id, data: {
+    titulo: $titulo
+    prioridade: $prioridade
+    status: $status
+    prazo: $prazo
+    notas: $notas
+    subtarefas: $subtarefas
+    meetingId: $reuniaoId
+    concluidoEm: $concluidoEm
+    valorNegocio: $valorNegocio
+    okrs: $okrs
+  }) {
+    id status concluidoEm
+  }
+}
+
+mutation DeleteTask($id: UUID!) {
+  task_delete(id: $id) { id }
+}
+
+# ─── Reuniões ─────────────────────────────────────────────────
+
+mutation CreateMeeting(
+  $titulo: String!
+  $dataHora: Timestamp!
+  $duracaoMin: Int!
+  $tipo: String!
+  $projetoIds: [String!]!
+  $participantes: [String!]!
+  $pauta: Any
+  $decisoes: Any
+  $encaminhamentos: Any
+  $notasGerais: String!
+) {
+  meeting_insert(data: {
+    titulo: $titulo
+    dataHora: $dataHora
+    duracaoMin: $duracaoMin
+    tipo: $tipo
+    projetoIds: $projetoIds
+    participantes: $participantes
+    pauta: $pauta
+    decisoes: $decisoes
+    encaminhamentos: $encaminhamentos
+    notasGerais: $notasGerais
+  }) {
+    id
+  }
+}
+
+mutation UpdateMeeting(
+  $id: UUID!
+  $titulo: String
+  $dataHora: Timestamp
+  $duracaoMin: Int
+  $tipo: String
+  $projetoIds: [String!]
+  $participantes: [String!]
+  $pauta: Any
+  $decisoes: Any
+  $encaminhamentos: Any
+  $notasGerais: String
+) {
+  meeting_update(id: $id, data: {
+    titulo: $titulo
+    dataHora: $dataHora
+    duracaoMin: $duracaoMin
+    tipo: $tipo
+    projetoIds: $projetoIds
+    participantes: $participantes
+    pauta: $pauta
+    decisoes: $decisoes
+    encaminhamentos: $encaminhamentos
+    notasGerais: $notasGerais
+  }) {
+    id titulo dataHora
+  }
+}
+
+mutation DeleteMeeting($id: UUID!) {
+  meeting_delete(id: $id) { id }
+}
+
+# ─── Relatórios ───────────────────────────────────────────────
+
+mutation CreateReport(
+  $periodoRef: String!
+  $dataInicio: Date!
+  $dataFim: Date!
+  $projetosSnapshot: Any
+  $destaques: [String!]!
+  $riscos: [String!]!
+  $proximosPassos: [String!]!
+) {
+  report_insert(data: {
+    periodoRef: $periodoRef
+    dataInicio: $dataInicio
+    dataFim: $dataFim
+    projetosSnapshot: $projetosSnapshot
+    destaques: $destaques
+    riscos: $riscos
+    proximosPassos: $proximosPassos
+  }) {
+    id
+  }
+}
+
+mutation UpdateReport(
+  $id: UUID!
+  $projetosSnapshot: Any
+  $destaques: [String!]
+  $riscos: [String!]
+  $proximosPassos: [String!]
+  $exportadoEm: Timestamp
+) {
+  report_update(id: $id, data: {
+    projetosSnapshot: $projetosSnapshot
+    destaques: $destaques
+    riscos: $riscos
+    proximosPassos: $proximosPassos
+    exportadoEm: $exportadoEm
+  }) {
+    id exportadoEm
+  }
+}
+
+mutation DeleteReport($id: UUID!) {
+  report_delete(id: $id) { id }
+}

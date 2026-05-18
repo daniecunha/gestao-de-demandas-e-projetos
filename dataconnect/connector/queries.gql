@@ -1,0 +1,140 @@
+# =============================================================
+# Queries — Firebase Data Connect
+# O SDK TypeScript é gerado automaticamente a partir deste arquivo
+# =============================================================
+
+# ─── Tecnologias ─────────────────────────────────────────────
+
+query ListTechnologies {
+  technologies(orderBy: [{ nome: ASC }]) {
+    id nome descricao cor icone criadoEm
+  }
+}
+
+query GetTechnology($id: UUID!) {
+  technology(id: $id) {
+    id nome descricao cor icone criadoEm
+  }
+}
+
+# ─── Projetos ─────────────────────────────────────────────────
+
+query ListProjects {
+  projects(orderBy: [{ criadoEm: DESC }]) {
+    id nome descricao status
+    technology { id nome cor icone }
+    reuniaoOrigem { id titulo }
+    tecnologias parceiro cor
+    dataInicio dataPrevisao contexto
+    valorNegocio okrs
+    criadoEm atualizadoEm
+  }
+}
+
+query GetProject($id: UUID!) {
+  project(id: $id) {
+    id nome descricao status
+    technology { id nome cor icone }
+    reuniaoOrigem { id titulo }
+    tecnologias parceiro cor
+    dataInicio dataPrevisao contexto
+    valorNegocio okrs
+    criadoEm atualizadoEm
+  }
+}
+
+# ─── Tarefas ──────────────────────────────────────────────────
+
+query ListTasks {
+  tasks(orderBy: [{ criadoEm: DESC }]) {
+    id titulo
+    project { id nome cor }
+    prioridade status prazo notas subtarefas
+    meeting { id titulo }
+    valorNegocio okrs
+    criadoEm concluidoEm
+  }
+}
+
+query ListTasksByProject($projetoId: UUID!) {
+  tasks(where: { project: { id: { eq: $projetoId } } }, orderBy: [{ criadoEm: DESC }]) {
+    id titulo
+    project { id nome cor }
+    prioridade status prazo notas subtarefas
+    meeting { id titulo }
+    valorNegocio okrs
+    criadoEm concluidoEm
+  }
+}
+
+query ListTasksHoje($hoje: Date!) {
+  tasks(
+    where: {
+      prazo: { le: $hoje }
+      status: { nin: ["concluido", "cancelado"] }
+    }
+    orderBy: [{ prioridade: ASC }]
+  ) {
+    id titulo
+    project { id nome cor }
+    prioridade status prazo notas
+    criadoEm
+  }
+}
+
+query GetTask($id: UUID!) {
+  task(id: $id) {
+    id titulo
+    project { id nome cor }
+    prioridade status prazo notas subtarefas
+    meeting { id titulo }
+    valorNegocio okrs
+    criadoEm concluidoEm
+  }
+}
+
+# ─── Reuniões ─────────────────────────────────────────────────
+
+query ListMeetings {
+  meetings(orderBy: [{ dataHora: DESC }]) {
+    id titulo dataHora duracaoMin tipo
+    projetoIds participantes pauta decisoes encaminhamentos notasGerais
+    criadoEm
+  }
+}
+
+query ListMeetingsProximas($agora: Timestamp!) {
+  meetings(
+    where: { dataHora: { ge: $agora } }
+    orderBy: [{ dataHora: ASC }]
+    limit: 5
+  ) {
+    id titulo dataHora duracaoMin tipo projetoIds participantes criadoEm
+  }
+}
+
+query GetMeeting($id: UUID!) {
+  meeting(id: $id) {
+    id titulo dataHora duracaoMin tipo
+    projetoIds participantes pauta decisoes encaminhamentos notasGerais
+    criadoEm
+  }
+}
+
+# ─── Relatórios ───────────────────────────────────────────────
+
+query ListReports {
+  reports(orderBy: [{ geradoEm: DESC }]) {
+    id periodoRef dataInicio dataFim
+    projetosSnapshot destaques riscos proximosPassos
+    geradoEm exportadoEm
+  }
+}
+
+query GetReport($id: UUID!) {
+  report(id: $id) {
+    id periodoRef dataInicio dataFim
+    projetosSnapshot destaques riscos proximosPassos
+    geradoEm exportadoEm
+  }
+}

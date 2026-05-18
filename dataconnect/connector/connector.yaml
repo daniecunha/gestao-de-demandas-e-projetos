@@ -1,0 +1,10 @@
+connectorId: "gestao-demandas-connector"
+
+# Modo PUBLIC pois o app não usa autenticação por usuário (anon key)
+authMode: PUBLIC
+
+generate:
+  javascriptSdk:
+    outputDir: "../../src/lib/dataconnect-sdk"
+    package: "@gestao/dataconnect"
+    packageJSONDir: "../../src/lib/dataconnect-sdk"

@@ -16,12 +16,14 @@ export function PageContainer({
   subtitle,
 }: PageContainerProps) {
   return (
-    <div className={['flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6', className].join(' ')}>
+    <div className={['flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6 animate-fade-in', className].join(' ')}>
       {(title || actions) && (
         <div className="flex items-start justify-between mb-6">
           <div>
             {title && (
-              <h2 className="text-xl font-bold text-gray-900">{title}</h2>
+              <h2 className="font-display text-xl font-semibold text-gray-900 tracking-tight">
+                {title}
+              </h2>
             )}
             {subtitle && (
               <p className="text-sm text-gray-500 mt-0.5">{subtitle}</p>

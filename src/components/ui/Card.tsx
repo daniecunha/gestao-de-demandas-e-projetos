@@ -12,8 +12,9 @@ export function Card({ children, className = '', onClick, hover = false }: CardP
     <div
       onClick={onClick}
       className={[
-        'bg-white rounded-xl border border-gray-200 shadow-sm',
-        hover && 'cursor-pointer hover:shadow-md hover:border-gray-300 transition-all',
+        'bg-white rounded-xl border border-gray-200 shadow-card',
+        // Lift + deeper shadow on hover: creates a physical "picking up" sensation
+        hover && 'cursor-pointer hover:-translate-y-0.5 hover:shadow-card-hover hover:border-gray-300 transition-all duration-200 ease-spring',
         onClick && !hover && 'cursor-pointer',
         className,
       ]
@@ -54,7 +55,7 @@ interface CardFooterProps {
 
 export function CardFooter({ children, className = '' }: CardFooterProps) {
   return (
-    <div className={['px-5 py-3 border-t border-gray-100 bg-gray-50 rounded-b-xl', className].join(' ')}>
+    <div className={['px-5 py-3 border-t border-gray-100 bg-gray-50/80 rounded-b-xl', className].join(' ')}>
       {children}
     </div>
   );

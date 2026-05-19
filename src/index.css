@@ -5,23 +5,27 @@
 @layer base {
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
+    /* Dot grid: visual signature of an "engineering workspace" — subtle, precise */
+    background-image: radial-gradient(circle, #d1d5db 1px, transparent 1px);
+    background-size: 28px 28px;
   }
 
-  ::-webkit-scrollbar {
-    @apply w-1.5 h-1.5;
+  /* Global focus-visible: applied to all interactive elements */
+  :focus-visible {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2;
   }
-  ::-webkit-scrollbar-track {
-    @apply bg-transparent;
-  }
-  ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 rounded-full;
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-400;
-  }
+
+  ::-webkit-scrollbar       { @apply w-1.5 h-1.5; }
+  ::-webkit-scrollbar-track  { @apply bg-transparent; }
+  ::-webkit-scrollbar-thumb  { @apply bg-gray-300 rounded-full; }
+  ::-webkit-scrollbar-thumb:hover { @apply bg-gray-400; }
 }
 
 @layer utilities {
+  /* Space Grotesk utility — apply to headings, numbers, brand marks */
+  .font-display { font-family: 'Space Grotesk', system-ui, sans-serif; }
+
   .line-clamp-2 {
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -34,4 +38,18 @@
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
+
+  /* Stagger: direct children animate in sequentially on mount */
+  .stagger > * {
+    @apply animate-fade-up;
+    animation-fill-mode: both;
+  }
+  .stagger > *:nth-child(1)  { animation-delay:   0ms; }
+  .stagger > *:nth-child(2)  { animation-delay:  55ms; }
+  .stagger > *:nth-child(3)  { animation-delay: 110ms; }
+  .stagger > *:nth-child(4)  { animation-delay: 165ms; }
+  .stagger > *:nth-child(5)  { animation-delay: 220ms; }
+  .stagger > *:nth-child(6)  { animation-delay: 275ms; }
+  .stagger > *:nth-child(7)  { animation-delay: 330ms; }
+  .stagger > *:nth-child(8)  { animation-delay: 385ms; }
 }

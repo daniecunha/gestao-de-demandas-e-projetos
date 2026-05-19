@@ -67,8 +67,8 @@ export function Dashboard() {
         </Button>
       }
     >
-      {/* Cards de métricas */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      {/* Cards de métricas — stagger: each card fades up with offset delay */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8 stagger">
         <MetricCard
           icon={<FolderKanban size={20} className="text-blue-600" />}
           label="Projetos ativos"
@@ -330,19 +330,18 @@ interface MetricCardProps {
 function MetricCard({ icon, label, value, total, color, onClick }: MetricCardProps) {
   return (
     <Card hover onClick={onClick}>
-      <CardBody>
-        <div className="flex items-center gap-3">
-          <div className={`p-2.5 rounded-xl ${color}`}>{icon}</div>
-          <div>
-            <p className="text-2xl font-bold text-gray-900">
-              {value}
-              {total !== undefined && (
-                <span className="text-sm font-normal text-gray-400 ml-1">/ {total}</span>
-              )}
-            </p>
-            <p className="text-xs text-gray-500">{label}</p>
-          </div>
+      <CardBody className="py-5">
+        <div className={`w-9 h-9 rounded-xl ${color} flex items-center justify-center mb-3`}>
+          {icon}
         </div>
+        {/* Space Grotesk numbers: geometric weight makes figures feel authoritative */}
+        <p className="font-display text-3xl font-bold text-gray-900 leading-none">
+          {value}
+          {total !== undefined && (
+            <span className="text-sm font-normal text-gray-400 ml-1.5">/{total}</span>
+          )}
+        </p>
+        <p className="text-xs text-gray-500 mt-1.5 font-medium">{label}</p>
       </CardBody>
     </Card>
   );

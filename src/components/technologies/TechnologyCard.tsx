@@ -29,10 +29,13 @@ export function TechnologyCard({ technology, projectCount, onEdit, onDelete }: T
 
   return (
     <div
-      className="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md hover:border-gray-300 transition-all cursor-pointer"
+      className="bg-white rounded-xl border border-gray-200 shadow-card hover:-translate-y-0.5 hover:shadow-card-hover hover:border-gray-300 transition-all duration-200 ease-spring cursor-pointer"
       onClick={() => navigate(`/tecnologias/${technology.id}`)}
     >
-      <div className="h-1.5 rounded-t-xl" style={{ backgroundColor: technology.cor }} />
+      <div
+        className="h-[3px] rounded-t-xl"
+        style={{ background: `linear-gradient(90deg, ${technology.cor} 0%, ${technology.cor}55 100%)` }}
+      />
       <div className="p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="flex items-center gap-3 flex-1 min-w-0">
@@ -54,7 +57,7 @@ export function TechnologyCard({ technology, projectCount, onEdit, onDelete }: T
             <div className="relative shrink-0">
               <button
                 onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
-                className="p-1.5 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-colors"
+                className="p-2 rounded-lg text-gray-400 hover:bg-gray-100 hover:text-gray-600 transition-all duration-150 focus-visible:ring-2 focus-visible:ring-blue-500"
               >
                 <MoreVertical size={15} />
               </button>

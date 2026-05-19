@@ -16,7 +16,7 @@ export function BottomNav() {
   const location = useLocation();
 
   return (
-    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 flex items-stretch safe-area-pb">
+    <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/90 backdrop-blur-sm border-t border-gray-200 flex items-stretch safe-area-pb">
       {NAV_ITEMS.map(({ to, icon: Icon, label }) => {
         const isActive =
           to === '/' ? location.pathname === '/' : location.pathname.startsWith(to);
@@ -32,7 +32,7 @@ export function BottomNav() {
             />
             <span
               className={[
-                'text-[9px] font-medium leading-none',
+                'text-[9px] font-medium leading-none font-display tracking-tight',
                 isActive ? 'text-blue-600' : 'text-gray-400',
               ].join(' ')}
             >

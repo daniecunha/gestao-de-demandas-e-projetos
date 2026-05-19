@@ -28,7 +28,7 @@ export function Sidebar() {
   return (
     <aside
       className={[
-        'h-screen bg-gray-900 text-white flex flex-col shrink-0 transition-all duration-300',
+        'h-screen bg-gray-900 text-white hidden md:flex flex-col shrink-0 transition-all duration-300',
         sidebarOpen ? 'w-56' : 'w-16',
       ].join(' ')}
     >

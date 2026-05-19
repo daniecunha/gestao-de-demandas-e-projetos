@@ -25,10 +25,10 @@ export function Header() {
   const hoje = format(new Date(), "EEEE, d 'de' MMMM 'de' yyyy", { locale: ptBR });
 
   return (
-    <header className="h-16 bg-white border-b border-gray-200 px-6 flex items-center justify-between shrink-0">
+    <header className="h-14 md:h-16 bg-white border-b border-gray-200 px-4 md:px-6 flex items-center justify-between shrink-0">
       <div>
-        <h1 className="text-lg font-semibold text-gray-900">{titulo}</h1>
-        <p className="text-xs text-gray-500 capitalize">{hoje}</p>
+        <h1 className="text-base md:text-lg font-semibold text-gray-900">{titulo}</h1>
+        <p className="hidden sm:block text-xs text-gray-500 capitalize">{hoje}</p>
       </div>
 
       <div className="flex items-center gap-3">

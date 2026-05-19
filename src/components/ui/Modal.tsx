@@ -40,7 +40,7 @@ export function Modal({ open, onClose, title, children, size = 'md', footer }: M
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center sm:p-4">
       {/* Overlay */}
       <div
         className="absolute inset-0 bg-black/40 backdrop-blur-sm"
@@ -51,13 +51,20 @@ export function Modal({ open, onClose, title, children, size = 'md', footer }: M
       {/* Painel */}
       <div
         className={[
-          'relative w-full bg-white rounded-2xl shadow-2xl flex flex-col max-h-[90vh]',
+          'relative w-full bg-white shadow-2xl flex flex-col',
+          'rounded-t-2xl sm:rounded-2xl',
+          'max-h-[92vh] sm:max-h-[90vh]',
           sizeClasses[size],
         ].join(' ')}
         role="dialog"
         aria-modal="true"
         aria-labelledby="modal-title"
       >
+        {/* Alça mobile */}
+        <div className="sm:hidden flex justify-center pt-3 pb-1 shrink-0">
+          <div className="w-10 h-1 rounded-full bg-gray-300" />
+        </div>
+
         {/* Cabeçalho */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 shrink-0">
           <h2 id="modal-title" className="text-lg font-semibold text-gray-900">

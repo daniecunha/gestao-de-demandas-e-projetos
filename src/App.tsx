@@ -3,6 +3,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
+import { BottomNav } from './components/layout/BottomNav';
 import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Technologies } from './pages/Technologies';
@@ -21,7 +22,7 @@ function AppShell() {
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
         <Header />
-        <main className="flex-1 overflow-hidden">
+        <main className="flex-1 overflow-hidden pb-16 md:pb-0">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/tecnologias" element={<Technologies />} />
@@ -37,6 +38,7 @@ function AppShell() {
           </Routes>
         </main>
       </div>
+      <BottomNav />
     </div>
   );
 }

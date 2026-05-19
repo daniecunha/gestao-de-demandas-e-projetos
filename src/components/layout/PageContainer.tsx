@@ -16,7 +16,7 @@ export function PageContainer({
   subtitle,
 }: PageContainerProps) {
   return (
-    <div className={['flex-1 overflow-y-auto p-4 md:p-6', className].join(' ')}>
+    <div className={['flex-1 overflow-y-auto p-4 md:p-6 pb-20 md:pb-6', className].join(' ')}>
       {(title || actions) && (
         <div className="flex items-start justify-between mb-6">
           <div>

@@ -17,18 +17,18 @@ export function ordenarTarefas(tasks: Task[]): Task[] {
 /** Agrupa tarefas por status para o kanban */
 export function agruparPorStatus(tasks: Task[]): Record<TaskStatus, Task[]> {
   const grupos: Record<TaskStatus, Task[]> = {
-    a_fazer: [],
+    a_fazer:      [],
     em_andamento: [],
-    bloqueado: [],
-    concluido: [],
-    cancelado: [],
+    homologacao:  [],
+    concluido:    [],
+    bloqueado:    [],
+    cancelado:    [],
   };
 
   for (const task of tasks) {
     grupos[task.status].push(task);
   }
 
-  // Ordena cada coluna por prioridade
   for (const status of Object.keys(grupos) as TaskStatus[]) {
     grupos[status] = ordenarTarefas(grupos[status]);
   }
@@ -44,11 +44,12 @@ export function contarPorStatus(tasks: Task[]): Record<TaskStatus, number> {
       return acc;
     },
     {
-      a_fazer: 0,
+      a_fazer:      0,
       em_andamento: 0,
-      bloqueado: 0,
-      concluido: 0,
-      cancelado: 0,
+      homologacao:  0,
+      concluido:    0,
+      bloqueado:    0,
+      cancelado:    0,
     } as Record<TaskStatus, number>
   );
 }
@@ -70,7 +71,7 @@ export function tarefasCriticas(tasks: Task[]): Task[] {
   );
 }
 
-/** Filtra tarefas com prazo para hoje ou vencidas */
+/** Filtra tarefas com prazo para hoje ou vencidas (bloqueado não conta) */
 export function tarefasDeHoje(tasks: Task[]): Task[] {
   const hoje = new Date().toISOString().split('T')[0];
   return tasks.filter(
@@ -78,7 +79,8 @@ export function tarefasDeHoje(tasks: Task[]): Task[] {
       t.prazo !== null &&
       t.prazo <= hoje &&
       t.status !== 'concluido' &&
-      t.status !== 'cancelado'
+      t.status !== 'cancelado' &&
+      t.status !== 'bloqueado'
   );
 }
 
@@ -90,11 +92,12 @@ export function tarefasBloqueadas(tasks: Task[]): Task[] {
 /** Prioridades disponíveis */
 export const PRIORIDADES: TaskPriority[] = ['critica', 'alta', 'media', 'baixa'];
 
-/** Status disponíveis */
+/** Status disponíveis (exclui cancelado da UI principal) */
 export const STATUS_TAREFAS: TaskStatus[] = [
   'a_fazer',
   'em_andamento',
-  'bloqueado',
+  'homologacao',
   'concluido',
+  'bloqueado',
   'cancelado',
 ];

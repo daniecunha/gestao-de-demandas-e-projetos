@@ -2,11 +2,25 @@ import { supabase } from './supabase';
 import type { Task, TaskFormData, TaskStatus } from '../types';
 
 export const tasksService = {
+  // Only returns active (non-archived) tasks
   listar: async (projeto_id?: string): Promise<Task[]> => {
     let query = supabase
       .from('tasks')
       .select('*')
+      .is('arquivado_em', null)
       .order('criado_em', { ascending: false });
+    if (projeto_id) query = query.eq('projeto_id', projeto_id);
+    const { data, error } = await query;
+    if (error) throw error;
+    return data;
+  },
+
+  listarArquivadas: async (projeto_id?: string): Promise<Task[]> => {
+    let query = supabase
+      .from('tasks')
+      .select('*')
+      .not('arquivado_em', 'is', null)
+      .order('arquivado_em', { ascending: false });
     if (projeto_id) query = query.eq('projeto_id', projeto_id);
     const { data, error } = await query;
     if (error) throw error;
@@ -57,6 +71,25 @@ export const tasksService = {
     return data;
   },
 
+  arquivar: async (id: string): Promise<void> => {
+    const { error } = await supabase
+      .from('tasks')
+      .update({ arquivado_em: new Date().toISOString() })
+      .eq('id', id);
+    if (error) throw error;
+  },
+
+  desarquivar: async (id: string): Promise<Task> => {
+    const { data, error } = await supabase
+      .from('tasks')
+      .update({ arquivado_em: null })
+      .eq('id', id)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
   excluir: async (id: string): Promise<void> => {
     const { error } = await supabase
       .from('tasks')
@@ -71,7 +104,8 @@ export const tasksService = {
       .from('tasks')
       .select('*')
       .lte('prazo', hoje)
-      .not('status', 'in', '("concluido","cancelado")')
+      .is('arquivado_em', null)
+      .not('status', 'in', '("concluido","cancelado","bloqueado")')
       .order('prioridade', { ascending: true });
     if (error) throw error;
     return data;

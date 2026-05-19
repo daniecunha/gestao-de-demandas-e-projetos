@@ -17,7 +17,7 @@ const schema = z.object({
   titulo: z.string().min(1, 'Título é obrigatório').max(500),
   projeto_id: z.string().min(1, 'Projeto é obrigatório'),
   prioridade: z.enum(['critica', 'alta', 'media', 'baixa']),
-  status: z.enum(['a_fazer', 'em_andamento', 'bloqueado', 'concluido', 'cancelado']),
+  status: z.enum(['a_fazer', 'em_andamento', 'homologacao', 'bloqueado', 'concluido', 'cancelado']),
   prazo: z.string().nullable().default(null),
   notas: z.string().default(''),
   subtarefas: z.array(subtaskSchema).default([]),

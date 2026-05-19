@@ -29,26 +29,30 @@ export const PROJECT_STATUS_DOT: Record<ProjectStatus, string> = {
 // ─── Status de Tarefa ─────────────────────────────────────────
 
 export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
-  a_fazer: 'A Fazer',
+  a_fazer:      'A Fazer',
   em_andamento: 'Em Andamento',
-  bloqueado: 'Bloqueado',
-  concluido: 'Concluído',
-  cancelado: 'Cancelado',
+  homologacao:  'Homologação',
+  concluido:    'Concluído',
+  bloqueado:    'Bloqueado',
+  cancelado:    'Cancelado',
 };
 
 export const TASK_STATUS_COLORS: Record<TaskStatus, string> = {
-  a_fazer: 'bg-slate-100 text-slate-700',
+  a_fazer:      'bg-slate-100 text-slate-700',
   em_andamento: 'bg-blue-100 text-blue-800',
-  bloqueado: 'bg-red-100 text-red-800',
-  concluido: 'bg-green-100 text-green-800',
-  cancelado: 'bg-gray-100 text-gray-500',
+  homologacao:  'bg-violet-100 text-violet-800',
+  concluido:    'bg-green-100 text-green-800',
+  bloqueado:    'bg-red-100 text-red-800',
+  cancelado:    'bg-gray-100 text-gray-500',
 };
 
+// Order: workflow progression left → right; bloqueado at end (it's an exception state)
 export const KANBAN_COLUMNS: TaskStatus[] = [
   'a_fazer',
   'em_andamento',
-  'bloqueado',
+  'homologacao',
   'concluido',
+  'bloqueado',
 ];
 
 // ─── Prioridade de Tarefa ─────────────────────────────────────

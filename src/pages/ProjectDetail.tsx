@@ -29,7 +29,7 @@ export function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [viewMode, setViewMode] = useState<'kanban' | 'lista'>('kanban');
 
-  const { tasks, createTask, updateTaskStatus, deleteTask } = useTasks(id);
+  const { tasks, createTask, updateTaskStatus, deleteTask, archiveTask } = useTasks(id);
 
   const [modalEditProject, setModalEditProject] = useState(false);
   const [modalNewTask, setModalNewTask] = useState(false);
@@ -233,6 +233,10 @@ export function ProjectDetail() {
           onEdit={(t) => { setEditingTask(t); setModalNewTask(true); }}
           onDelete={deleteTask}
           onStatusChange={handleStatusChange}
+          onArchive={async (id) => {
+            if (!window.confirm('Arquivar esta tarefa?')) return;
+            await archiveTask(id);
+          }}
         />
       ) : (
         <TaskList

@@ -4,15 +4,20 @@ import type { Task, TaskFormData, TaskStatus, FilterState } from '../types';
 
 interface TasksState {
   tasks: Task[];
+  archivedTasks: Task[];
   loading: boolean;
+  loadingArchive: boolean;
   error: string | null;
   filters: FilterState;
   viewMode: 'kanban' | 'lista';
   // Ações
   fetchTasks: (projeto_id?: string) => Promise<void>;
+  fetchArchivedTasks: (projeto_id?: string) => Promise<void>;
   createTask: (data: TaskFormData) => Promise<Task>;
   updateTask: (id: string, data: Partial<TaskFormData>) => Promise<void>;
   updateTaskStatus: (id: string, status: TaskStatus) => Promise<void>;
+  archiveTask: (id: string) => Promise<void>;
+  unarchiveTask: (id: string) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   setFilters: (filters: Partial<FilterState>) => void;
   resetFilters: () => void;
@@ -30,7 +35,9 @@ const DEFAULT_FILTERS: FilterState = {
 
 export const useTasksStore = create<TasksState>((set, get) => ({
   tasks: [],
+  archivedTasks: [],
   loading: false,
+  loadingArchive: false,
   error: null,
   filters: DEFAULT_FILTERS,
   viewMode: 'kanban',
@@ -42,6 +49,16 @@ export const useTasksStore = create<TasksState>((set, get) => ({
       set({ tasks, loading: false });
     } catch (err) {
       set({ error: (err as Error).message, loading: false });
+    }
+  },
+
+  fetchArchivedTasks: async (projeto_id) => {
+    set({ loadingArchive: true });
+    try {
+      const archivedTasks = await tasksService.listarArquivadas(projeto_id);
+      set({ archivedTasks, loadingArchive: false });
+    } catch (err) {
+      set({ error: (err as Error).message, loadingArchive: false });
     }
   },
 
@@ -65,9 +82,37 @@ export const useTasksStore = create<TasksState>((set, get) => ({
     }));
   },
 
+  archiveTask: async (id) => {
+    await tasksService.arquivar(id);
+    // Remove from active list; add to archive list if it was already loaded
+    set((state) => {
+      const task = state.tasks.find((t) => t.id === id);
+      const archived = task
+        ? { ...task, arquivado_em: new Date().toISOString() }
+        : null;
+      return {
+        tasks: state.tasks.filter((t) => t.id !== id),
+        archivedTasks: archived
+          ? [archived, ...state.archivedTasks]
+          : state.archivedTasks,
+      };
+    });
+  },
+
+  unarchiveTask: async (id) => {
+    const restored = await tasksService.desarquivar(id);
+    set((state) => ({
+      tasks: [restored, ...state.tasks],
+      archivedTasks: state.archivedTasks.filter((t) => t.id !== id),
+    }));
+  },
+
   deleteTask: async (id) => {
     await tasksService.excluir(id);
-    set((state) => ({ tasks: state.tasks.filter((t) => t.id !== id) }));
+    set((state) => ({
+      tasks: state.tasks.filter((t) => t.id !== id),
+      archivedTasks: state.archivedTasks.filter((t) => t.id !== id),
+    }));
   },
 
   setFilters: (filters) => {

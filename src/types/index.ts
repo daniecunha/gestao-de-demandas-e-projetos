@@ -49,6 +49,7 @@ export type TaskPriority = 'critica' | 'alta' | 'media' | 'baixa';
 export type TaskStatus =
   | 'a_fazer'
   | 'em_andamento'
+  | 'homologacao'
   | 'bloqueado'
   | 'concluido'
   | 'cancelado';
@@ -73,9 +74,10 @@ export interface Task {
   okrs: string[];
   criado_em: string;
   concluido_em: string | null;
+  arquivado_em: string | null;
 }
 
-export type TaskFormData = Omit<Task, 'id' | 'criado_em' | 'concluido_em'>;
+export type TaskFormData = Omit<Task, 'id' | 'criado_em' | 'concluido_em' | 'arquivado_em'>;
 
 // ─── Reunião ──────────────────────────────────────────────────
 export type MeetingType =

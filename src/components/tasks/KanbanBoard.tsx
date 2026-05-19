@@ -24,20 +24,18 @@ interface KanbanColumnProps {
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
   onToggleStatus: (task: Task) => void;
+  onArchive: (id: string) => void;
 }
 
 function SortableTaskCard({
-  task,
-  project,
-  onEdit,
-  onDelete,
-  onToggleStatus,
+  task, project, onEdit, onDelete, onToggleStatus, onArchive,
 }: {
   task: Task;
   project?: Project;
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
   onToggleStatus: (task: Task) => void;
+  onArchive: (id: string) => void;
 }) {
   const { setNodeRef, transform, transition, isDragging } = useSortable({ id: task.id });
 
@@ -56,6 +54,7 @@ function SortableTaskCard({
         onEdit={onEdit}
         onDelete={onDelete}
         onToggleStatus={onToggleStatus}
+        onArchive={onArchive}
         compact
       />
     </div>
@@ -65,27 +64,22 @@ function SortableTaskCard({
 const COLUMN_HEADER_COLORS: Record<TaskStatus, string> = {
   a_fazer:      'bg-slate-500',
   em_andamento: 'bg-blue-500',
-  bloqueado:    'bg-red-500',
+  homologacao:  'bg-violet-500',
   concluido:    'bg-green-500',
+  bloqueado:    'bg-red-500',
   cancelado:    'bg-gray-400',
 };
 
 function KanbanColumnView({
-  status,
-  tasks,
-  projects,
-  onEdit,
-  onDelete,
-  onToggleStatus,
+  status, tasks, projects, onEdit, onDelete, onToggleStatus, onArchive,
 }: KanbanColumnProps) {
   const projectMap = new Map(projects.map((p) => [p.id, p]));
 
   return (
-    <div className="flex flex-col bg-gray-50 rounded-xl border border-gray-200 min-h-[400px] w-72 shrink-0">
-      {/* Cabeçalho da coluna */}
+    <div className="flex flex-col bg-gray-50/80 rounded-xl border border-gray-200 min-h-[400px] w-72 shrink-0">
       <div className="flex items-center gap-2 px-3 py-3 border-b border-gray-200">
         <span className={`w-2.5 h-2.5 rounded-full ${COLUMN_HEADER_COLORS[status]}`} />
-        <span className="text-sm font-semibold text-gray-700">
+        <span className="text-sm font-semibold text-gray-700 font-display">
           {TASK_STATUS_LABELS[status]}
         </span>
         <span className="ml-auto text-xs font-medium text-gray-400 bg-gray-200 rounded-full px-2 py-0.5">
@@ -93,7 +87,6 @@ function KanbanColumnView({
         </span>
       </div>
 
-      {/* Cards */}
       <SortableContext
         items={tasks.map((t) => t.id)}
         strategy={verticalListSortingStrategy}
@@ -107,6 +100,7 @@ function KanbanColumnView({
               onEdit={onEdit}
               onDelete={onDelete}
               onToggleStatus={onToggleStatus}
+              onArchive={onArchive}
             />
           ))}
           {tasks.length === 0 && (
@@ -126,14 +120,11 @@ interface KanbanBoardProps {
   onEdit: (task: Task) => void;
   onDelete: (id: string) => void;
   onStatusChange: (taskId: string, newStatus: TaskStatus) => void;
+  onArchive: (id: string) => void;
 }
 
 export function KanbanBoard({
-  tasks,
-  projects,
-  onEdit,
-  onDelete,
-  onStatusChange,
+  tasks, projects, onEdit, onDelete, onStatusChange, onArchive,
 }: KanbanBoardProps) {
   const [activeId, setActiveId] = useState<string | null>(null);
   const grupos = agruparPorStatus(tasks);
@@ -153,7 +144,6 @@ export function KanbanBoard({
     const taskId = active.id as string;
     const overId = over.id as string;
 
-    // Determinar coluna de destino
     const targetStatus = (KANBAN_COLUMNS as string[]).includes(overId)
       ? (overId as TaskStatus)
       : tasks.find((t) => t.id === overId)?.status;
@@ -192,6 +182,7 @@ export function KanbanBoard({
             onEdit={onEdit}
             onDelete={onDelete}
             onToggleStatus={handleToggleStatus}
+            onArchive={onArchive}
           />
         ))}
       </div>
@@ -204,6 +195,7 @@ export function KanbanBoard({
               project={projectMap.get(activeTask.projeto_id)}
               onEdit={() => {}}
               onDelete={() => {}}
+              onArchive={() => {}}
               compact
             />
           </div>
